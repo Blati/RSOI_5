@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-6 mt-5 mx-auto">
         <form v-on:submit.prevent="register">
-          <h1 class="h3 mb-3 font-weight-normal">Register</h1>
+          <h1 class="h3 mb-3 font-weight-normal">Registration</h1>
           <div class="form-group">
             <label for="name">First name</label>
             <input type="text" v-model="first_name" class="form-control" name="first_name" placeholder="Enter your first name">

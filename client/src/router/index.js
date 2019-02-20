@@ -8,6 +8,7 @@ import Adding from '@/components/Adding'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
 import Profile from '@/components/Profile'
+import Movies from '@/components/Movies'
 
 Vue.use(Router)
 
@@ -52,6 +53,11 @@ export default new Router({
       path: '/profile',
       name: 'Profile',
       component: Profile
+    },
+	{
+      path: '/movies',
+      name: 'Movies',
+      component: Movies
     }
   ]
 })

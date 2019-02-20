@@ -18,7 +18,7 @@
           <router-link class="nav-link" to="/login">Login</router-link>
         </li>
         <li v-if="auth==''" class="nav-item">
-          <router-link class="nav-link" to="/register">Register</router-link>
+          <router-link class="nav-link" to="/register">Registration</router-link>
         </li>
         <li v-if="auth=='loggedin'" class="nav-item">
           <router-link class="nav-link" to="/profile">Profile</router-link>

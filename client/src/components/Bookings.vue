@@ -26,7 +26,8 @@
               </ul>
             </li>
            </ul>
-          <router-link :to="'../'  + 'bookings/add/09022019'">Add</router-link>
+          <router-link v-if="check==true" :to="'../'  + 'bookings/add/09022019'">Add</router-link>
+		  <router-link v-else to="/movies">Add</router-link>
         </tbody>
       </table>
     </div>
@@ -43,10 +44,21 @@ export default {
       info: null
     }
   },
+  checker () {
+    return {
+      check: true,
+	}
+  },
   mounted () {
     axios
       .get('http://127.0.0.1:5000/users/' + this.$route.params.id + '/bookings')
       .then(response => (this.info = response.data))
+    axios
+	  .get('http://127.0.0.1:5000/showtimes')
+	  .then( 
+	    (response) => { this.check = true },
+	    (error) => { this.check = false }
+      );
   },
   filters: {
     formatDate: function (value) {

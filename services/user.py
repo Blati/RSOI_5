@@ -19,14 +19,30 @@ def hello():
     return nice_json({
         "uri": "/",
         "subresource_uris": {
+		    "movies": "/movies",
+            "showtimes": "/showtimes",
             "users": "/users",
             "user": "/users/<username>",
-			"auth": "/auth/login",
-			"auth_reg": "/auth/register",
+            "auth": "/auth/login",
+            "auth_reg": "/auth/register",
             "bookings": "/users/<username>/bookings",
             "bookings_add": "/users/<username>/bookings/add"
         }
     })
+
+@app.route("/showtimes", methods=['GET'])
+def showtimes_list():
+    result = requests.get("http://127.0.0.1:5002/showtimes")
+    result = result.json()	
+
+    return nice_json(result)
+	
+@app.route("/movies", methods=['GET'])
+def movies_list():
+    result = requests.get("http://127.0.0.1:5001/movies")
+    result = result.json()
+	
+    return nice_json(result)	
 
 @app.route("/users", methods=['GET'])
 def users_list():
