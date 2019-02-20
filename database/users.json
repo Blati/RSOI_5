@@ -1,0 +1,37 @@
+{
+  "egor_schukin" : {
+    "id": "egor_schukin",
+    "name": "Egor Schukin",
+    "last_active": 110
+  },
+  "anna_filatova" : {
+    "id": "anna_filatova",
+    "name": "Anna Filatova",
+    "last_active": 222
+  },
+  "george_bespalov" : {
+    "id": "george_bespalov",
+    "name": "George Bespalov",
+    "last_active": 425
+  },
+  "larisa_burova" : {
+    "id": "larisa_burova",
+    "name": "Larisa Burova",
+    "last_active": 625
+  },
+  "alla_drozdova" : {
+    "id": "alla_drozdova",
+    "name": "Alla Drozdova",
+    "last_active": 325
+  },
+  "yury_osipov" : {
+    "id": "yury_osipov",
+    "name": "Yury Osipov",
+    "last_active": 225
+  },
+  "ekaterina_zinovyeva" : {
+    "id": "ekaterina_zinovyeva",
+    "name": "Ekaterina Zinovyeva",
+    "last_active": 202
+  }
+}

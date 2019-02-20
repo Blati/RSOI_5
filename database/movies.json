@@ -1,0 +1,44 @@
+{
+  "id1": {
+    "title": "Bohemian Rhapsody",
+    "rating": 8.2,
+    "director": "Bryan Singer",
+    "id": "id1"
+  },
+  "id2": {
+    "title": "Glass",
+    "rating": 7.0,
+    "director": "M. Night Shyamalan",
+    "id": "id2"
+  },
+  "id3": {
+    "title": "The House That Jack Built",
+    "rating": 7.0,
+    "director": "Lars von Trier",
+    "id": "id3"
+  },
+  "id4": {
+    "title": "Green Book",
+    "rating": 8.3,
+    "director": "Peter Farrelly",
+    "id": "id4"
+  },
+  "id5": {
+    "title": "T-34",
+    "rating": 6.2,
+    "director": "Aleksey Sidorov",
+    "id": "id5"
+  },
+  "id6": {
+    "title": "Spider-Man: Into the Spider-Verse",
+    "rating": 8.7,
+    "director": " Bob Persichetti",
+    "id": "id6"
+  },
+  "id7": {
+    "title": "The Grinch",
+    "rating": 6.3,
+    "director": "Yarrow Cheney",
+    "id": "id7"
+  }
+}
