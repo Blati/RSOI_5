@@ -58,6 +58,7 @@ export default {
     };
 	  
 	  axios.post('http://127.0.0.1:5000/users/' + this.$route.params.id + '/bookings/add/' + film_date, json, axiosConfig)
+	  alert('Successfully booked!')
     }
   },
   computed: {

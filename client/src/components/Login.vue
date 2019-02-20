@@ -37,17 +37,22 @@ export default {
       axios.post('auth/login',
         {
           email: this.email,
-          password: this.password
+          password: this.password	
         }
       ).then((res) => {
         sessionStorage.setItem('usertoken', res.data.token)
+        if (res.data.token == null)
+        {
+          alert('Wrong email or password!')
+          return		  
+        }
         this.email = ''
         this.password = ''
         router.push({ name: 'Profile' })
+        this.emitMethod()
       }).catch((err) => {
         console.log(err)
       })
-      this.emitMethod()
     },
     emitMethod () {
       EventBus.$emit('logged-in', 'loggedin')
