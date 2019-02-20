@@ -2,7 +2,7 @@
   <div class="container">
     <div class="jumbotron mt-5">
       <div class="col-sm-8 mx-auto">
-        <h1 class="text-center">FILMS (date: {{this.$route.params.date}}) </h1><br>
+        <h1 class="text-center">FILMS ({{this.$route.params.date|formatDate}}) </h1><br>
       </div>
       <table class="table col-md-10 mx-auto">
         <tbody>
@@ -55,10 +55,15 @@ export default {
           'Content-Type': 'application/json;charset=UTF-8',
           "Access-Control-Allow-Origin": "*"
       }
-    };
-	  
-	  axios.post('http://127.0.0.1:5000/users/' + this.$route.params.id + '/bookings/add/' + film_date, json, axiosConfig)
-	  alert('Successfully booked!')
+    };  
+	
+	axios.post('http://127.0.0.1:5000/users/' + this.$route.params.id + '/bookings/add/' + film_date, 
+	  json, axiosConfig)
+	  .then( 
+	    (response) => { alert('Successfully booked!') },
+	    (error) => { alert('Sorry, one of the servers is not available at the moment') }
+      );
+
     }
   },
   computed: {
@@ -91,6 +96,14 @@ export default {
     axios
       .get('http://127.0.0.1:5000/users/' + this.$route.params.id + '/bookings/add/' + this.$route.params.date)
       .then(response => (this.info = response.data))
+  },
+  filters: {
+    formatDate: function (value) {
+      if (value) {
+        var symbols = value.split("")
+        return (symbols[0] + symbols[1] + '/' + symbols[2] + symbols[3] + '/' + symbols[4] + symbols[5] + symbols[6] + symbols[7])
+      }
+    }
   }
 }
 </script>

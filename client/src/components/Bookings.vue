@@ -10,7 +10,7 @@
             <li v-for="(item, index) in info">
               <tr>
                 <td>Date:</td>
-                <td> {{ index }} </td>
+                <td> {{ index|formatDate }} </td>
               </tr>
               <ul>
                 <li v-for="value in item">
@@ -51,7 +51,8 @@ export default {
   filters: {
     formatDate: function (value) {
       if (value) {
-        return moment(String(value)).format('MM/DD/YYYY')
+        var symbols = value.split("")
+        return (symbols[0] + symbols[1] + '/' + symbols[2] + symbols[3] + '/' + symbols[4] + symbols[5] + symbols[6] + symbols[7])
       }
     }
   }
