@@ -2,11 +2,16 @@ from services import root_dir, nice_json
 from flask import Flask, jsonify, request, json
 from flask_pymongo  import PyMongo
 from bson.objectid import ObjectId
-from datetime import datetime
+import datetime
+import json
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
-from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
+from flask_jwt_extended import (
+    jwt_required, create_access_token,
+    jwt_refresh_token_required, create_refresh_token,
+    get_jwt_identity, fresh_jwt_required
+)
 
 app = Flask(__name__)
 
@@ -27,7 +32,7 @@ def user_register():
     last_name = request.get_json()['last_name']
     email = request.get_json()['email']
     password = bcrypt.generate_password_hash(request.get_json()['password']).decode('utf-8')
-    created = datetime.utcnow()
+    created = datetime.datetime.utcnow()
 
     user_id = auth.insert({
 	'first_name' : first_name, 
@@ -57,20 +62,40 @@ def user_login():
                 'access_token' : create_access_token(identity = {
 			        'first_name': response['first_name'],
 				    'last_name': response['last_name'],
-				    'email': response['email']}),
+				    'email': response['email']}, expires_delta=datetime.timedelta(minutes=30)),
                 'refresh_token' : create_refresh_token(identity = {
 			        'first_name': response['first_name'],
 				    'last_name': response['last_name'],
 				    'email': response['email']})	
             }				
             result = nice_json(ret)
+            with open("{}/tokens/token.json".format(root_dir()), "w") as f:
+                json.dump(ret,f)
         else:
             result = nice_json({"error":"Invalid username and password"})            
     else:
         result = nice_json({"result":"No results found"})
 
-    return result
-	
-	
+    return result, 200
+
+@app.route('/refresh', methods=['POST'])
+@jwt_refresh_token_required
+def refresh():
+    current_user = get_jwt_identity()
+    ret = {
+        'access_token': create_access_token(identity=current_user)
+    }
+
+    return nice_json(ret)	
+
+@app.route('/check', methods=['GET'])
+@jwt_required
+def check():
+    ret = {'msg':'OK'}
+    result = nice_json(ret)
+    return result, 200
+
+
+
 if __name__ == "__main__":
     app.run(port = 5004, debug = True)

@@ -2,17 +2,19 @@ from services import root_dir, nice_json
 from flask import Flask
 from flask import request
 from flask_cors import CORS
-from werkzeug.exceptions import NotFound, ServiceUnavailable
+from werkzeug.exceptions import NotFound, ServiceUnavailable, Unauthorized
 import json
 import requests
 from logging import FileHandler, WARNING
 
 app = Flask(__name__)
+app.config['JWT_SECRET_KEY'] = 'definetly_not_a_secret_key'
 
 CORS(app)
 
 with open("{}/database/users.json".format(root_dir()), "r") as f:
     users = json.load(f)
+
 	
 @app.route("/", methods=['GET'])
 def hello():
@@ -56,7 +58,7 @@ def user_register():
         result = requests.post("http://127.0.0.1:5004/register", raw)
     except requests.exceptions.ConnectionError:
         raise ServiceUnavailable("The Authorization service is unavailable.")
-	
+
     return nice_json(result.json())
 	
 @app.route("/auth/login", methods=['POST'])
@@ -67,7 +69,7 @@ def user_login():
         result = requests.post("http://127.0.0.1:5004/login", raw)
     except requests.exceptions.ConnectionError:
         raise ServiceUnavailable("The Authorization service is unavailable.")
-
+    
     return nice_json(result.json())
 	
 @app.route("/users/<username>", methods=['GET'])
@@ -113,6 +115,14 @@ def user_bookings(username):
 @app.route("/users/<username>/bookings/add", defaults={'page': '08022019'}, methods=['GET', 'POST'])
 @app.route("/users/<username>/bookings/add/<page>", methods=['GET', 'POST'])
 def user_bookings_add(username, page):
+    
+    with open("{}/tokens/token.json".format(root_dir()), "r") as ff:
+        token = json.load(ff)
+    headers = {"Content-Type": "application/json", "Authorization": "Bearer {}".format(token['access_token'])}
+    auth_check = requests.get("http://127.0.0.1:5004/check", headers=headers)
+    auth_check = auth_check.json()
+    if auth_check['msg'] != 'OK':
+        raise Unauthorized(auth_check['msg'])
 
     if username not in users:
         raise NotFound("User '{}' not found.".format(username))
