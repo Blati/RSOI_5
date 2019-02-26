@@ -2,6 +2,7 @@ from services import root_dir, nice_json
 from flask import Flask
 from flask import request
 from flask_cors import CORS
+from flask_celery import make_celery
 from werkzeug.exceptions import NotFound, ServiceUnavailable, Unauthorized, ServiceUnavailable
 import json
 import requests
@@ -9,12 +10,20 @@ from logging import FileHandler, WARNING
 
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = 'definetly_not_a_secret_key'
+app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379'
+app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379'
+
+celery = make_celery(app)
 
 CORS(app)
 
 with open("{}/database/users.json".format(root_dir()), "r") as f:
     users = json.load(f)
 
+@celery.task()
+def registration(data):
+    resp = requests.post("http://127.0.0.1:5004/register", data)
+    return "Registered!"
 	
 @app.route("/", methods=['GET'])
 def hello():
@@ -55,11 +64,11 @@ def user_register():
     raw = json.dumps(request.get_json())
 	
     try:
-        result = requests.post("http://127.0.0.1:5004/register", raw)
+        result = registration(raw)
     except requests.exceptions.ConnectionError:
         raise ServiceUnavailable("The Authorization service is unavailable.")
 
-    return nice_json(result.json())
+    return "Registered!"
 	
 @app.route("/auth/login", methods=['POST'])
 def user_login():
@@ -160,7 +169,7 @@ def user_bookings_add(username, page):
 			
         return nice_json(result)
 
-    if request.method == 'POST':
+    if request.method == 'POST':	
         raw = request.get_json()
         try:
             user_resp = requests.get("http://127.0.0.1:5000/users/{}".format(username))
