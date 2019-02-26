@@ -2,7 +2,7 @@ from services import root_dir, nice_json
 from flask import Flask
 from flask import request
 from flask_cors import CORS
-from werkzeug.exceptions import NotFound, ServiceUnavailable, Unauthorized
+from werkzeug.exceptions import NotFound, ServiceUnavailable, Unauthorized, ServiceUnavailable
 import json
 import requests
 from logging import FileHandler, WARNING
@@ -162,10 +162,15 @@ def user_bookings_add(username, page):
 
     if request.method == 'POST':
         raw = request.get_json()
-        result = requests.post("http://127.0.0.1:5003/bookings/{}/add".format(username), json={username:raw})
+        try:
+            user_resp = requests.get("http://127.0.0.1:5000/users/{}".format(username))
+        except:
+            raise ServiceUnavailable("Sorry, service unavailable at the moment!")
+        try:
+            result = requests.post("http://127.0.0.1:5003/bookings/{}/add".format(username), json={username:raw})
+        except:
+            raise ServiceUnavailable("Sorry, service unavailable at the moment!")
         result = result.json()
-		
-        user_resp = requests.get("http://127.0.0.1:5000/users/{}".format(username))
         user_resp = user_resp.json()
         content = {
             "id": user_resp["id"],
