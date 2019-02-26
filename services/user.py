@@ -117,7 +117,10 @@ def user_bookings(username):
 def user_bookings_add(username, page):
     
     with open("{}/tokens/token.json".format(root_dir()), "r") as ff:
-        token = json.load(ff)
+        try:
+            token = json.load(ff)
+        except:
+            raise Unauthorized()          
     headers = {"Content-Type": "application/json", "Authorization": "Bearer {}".format(token['access_token'])}
     auth_check = requests.get("http://127.0.0.1:5004/check", headers=headers)
     auth_check = auth_check.json()

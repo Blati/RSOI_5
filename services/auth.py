@@ -85,7 +85,8 @@ def refresh():
     ret = {
         'access_token': create_access_token(identity=current_user)
     }
-
+    with open("{}/tokens/token.json".format(root_dir()), "w") as f:
+        json.dump(ret,f)
     return nice_json(ret)	
 
 @app.route('/check', methods=['GET'])
