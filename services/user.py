@@ -126,7 +126,11 @@ def user_bookings_add(username, page):
     auth_check = auth_check.json()
     if auth_check['msg'] != 'OK':
         raise Unauthorized(auth_check['msg'])
-
+    
+    headers = {"Content-Type": "application/json", "Authorization": "Bearer {}".format(token['refresh_token'])}
+    if auth_check['msg'] == 'Token has expired':
+        auth_refresh = requests.post("http://127.0.0.1:5004/refresh", headers=headers)
+	
     if username not in users:
         raise NotFound("User '{}' not found.".format(username))
 

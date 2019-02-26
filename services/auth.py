@@ -83,7 +83,8 @@ def user_login():
 def refresh():
     current_user = get_jwt_identity()
     ret = {
-        'access_token': create_access_token(identity=current_user)
+        'access_token': create_access_token(identity=current_user),
+		'refresh_token': create_refresh_token(identity=current_user)
     }
     with open("{}/tokens/token.json".format(root_dir()), "w") as f:
         json.dump(ret,f)
