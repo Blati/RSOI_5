@@ -40,8 +40,8 @@ export default {
           password: this.password	
         }
       ).then((res) => {
-        sessionStorage.setItem('usertoken', res.data.token)
-        if (res.data.token == null)
+        sessionStorage.setItem('usertoken', res.data.access_token)
+        if (res.data.access_token == null)
         {
           alert('Wrong email or password!')
           return		  

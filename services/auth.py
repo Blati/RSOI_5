@@ -53,12 +53,17 @@ def user_login():
 
     if response:	
         if bcrypt.check_password_hash(response['password'], password):
-            access_token = create_access_token(identity = {
-			    'first_name': response['first_name'],
-				'last_name': response['last_name'],
-				'email': response['email']}
-				)
-            result = nice_json({"token":access_token})
+            ret = {
+                'access_token' : create_access_token(identity = {
+			        'first_name': response['first_name'],
+				    'last_name': response['last_name'],
+				    'email': response['email']}),
+                'refresh_token' : create_refresh_token(identity = {
+			        'first_name': response['first_name'],
+				    'last_name': response['last_name'],
+				    'email': response['email']})	
+            }				
+            result = nice_json(ret)
         else:
             result = nice_json({"error":"Invalid username and password"})            
     else:
