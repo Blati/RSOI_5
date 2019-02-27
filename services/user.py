@@ -20,7 +20,7 @@ CORS(app)
 with open("{}/database/users.json".format(root_dir()), "r") as f:
     users = json.load(f)
 
-@celery.task()
+@celery.task(name='user.registration')
 def registration(data):
     resp = requests.post("http://127.0.0.1:5004/register", data)
     return "Registered!"
@@ -64,7 +64,7 @@ def user_register():
     raw = json.dumps(request.get_json())
 	
     try:
-        result = registration(raw)
+        result = registration.delay(raw)
     except requests.exceptions.ConnectionError:
         raise ServiceUnavailable("The Authorization service is unavailable.")
 
